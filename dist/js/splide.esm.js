@@ -2756,6 +2756,13 @@ var abs = Math.abs;
 
   var isVertical = Splide.options.direction === TTB;
   /**
+   * Whether the slides are to appear as halfed.
+   *
+   * @type {boolean}
+   */
+
+  var isHalved = Splide.options.halved === true;
+  /**
    * Whether the slider type is FADE or not.
    *
    * @type {boolean}
@@ -2967,6 +2974,21 @@ var abs = Math.abs;
     },
 
     /**
+     *
+     * @param {number} index - Slide index.
+     *
+     * Return Bool
+     *
+     */
+    isNotAtEnd: function isNotAtEnd(index) {
+      if (index === Splide.Components.Controller.edgeIndex) {
+        return false;
+      }
+
+      return true;
+    },
+
+    /**
      * Calculate the track position by a slide index.
      *
      * @param {number} index - Slide index.
@@ -2975,6 +2997,11 @@ var abs = Math.abs;
      */
     toPosition: function toPosition(index) {
       var position = Layout.totalSize(index) - Layout.slideSize(index) - Layout.gap;
+
+      if (isHalved && this.isNotAtEnd(index)) {
+        return sign * (position + this.offset(index)) + Layout.slideSize(index) / 2;
+      }
+
       return sign * (position + this.offset(index));
     },
 
